@@ -1,0 +1,23 @@
+{
+  "name": "shopping-list",
+  "version": "1.0.0",
+  "description": "Shopping list desktop app",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist-win": "build"
+  },
+  "author": "Jaxton Willman",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^3.0.10",
+    "cross-env": "^5.2.0"
+  },
+  "devDependencies": {
+    "electron": "^3.0.10",
+    "cross-env": "^5.2.0",
+    "electron-builder": "^20.38.2"
+  }
+
+  
+}
