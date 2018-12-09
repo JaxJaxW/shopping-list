@@ -2,15 +2,31 @@
   "name": "shopping-list",
   "version": "1.0.0",
   "description": "Shopping list desktop app",
+  "keywords": [
+    "shopping",
+    "list",
+    "shoppinglist"
+  ],
+  "homepage": "https://github.com/JaxJaxW/shopping-list#readme",
+  "bugs": {
+    "url": "https://github.com/JaxJaxW/shopping-list/issues",
+    "email": "jaxwill109@gmail.com"
+  },
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JaxJaxW/shopping-list.git"
+  },
   "scripts": {
     "start": "electron .",
     "dist-win": "build"
   },
-  "author": "Jaxton Willman",
-  "license": "MIT",
+  "author": {
+    "name": "Jaxton Willman",
+    "email": "b@rubble.com",
+    "url": "http://barnyrubble.tumblr.com/"
+  },
   "dependencies": {
-    "electron": "^3.0.10",
     "cross-env": "^5.2.0"
   },
   "devDependencies": {
@@ -18,6 +34,4 @@
     "cross-env": "^5.2.0",
     "electron-builder": "^20.38.2"
   }
-
-  
 }
