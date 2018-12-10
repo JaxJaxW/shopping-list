@@ -1,7 +1,7 @@
 {
   "name": "shopping-list",
   "version": "1.0.0",
-  "description": "Shopping list desktop app",
+  "description": "Shopping List Desktop App",
   "keywords": [
     "shopping",
     "list",
@@ -9,8 +9,7 @@
   ],
   "homepage": "https://github.com/JaxJaxW/shopping-list#readme",
   "bugs": {
-    "url": "https://github.com/JaxJaxW/shopping-list/issues",
-    "email": "jaxwill109@gmail.com"
+    "url": "https://github.com/JaxJaxW/shopping-list/issues"
   },
   "main": "main.js",
   "repository": {
@@ -22,9 +21,7 @@
     "dist-win": "build"
   },
   "author": {
-    "name": "Jaxton Willman",
-    "email": "b@rubble.com",
-    "url": "http://barnyrubble.tumblr.com/"
+    "name": "Jaxton Willman"
   },
   "dependencies": {
     "cross-env": "^5.2.0"
