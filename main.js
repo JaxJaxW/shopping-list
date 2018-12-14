@@ -1,61 +1,64 @@
-const electron = require('electron');
-const url = require('url');
-const path = require('path');
+const electron = require('electron')
+const url = require('url')
+const path = require('path')
 
-const { app, BrowserWindow, Menu, ipcMain } = electron;
+const { app, BrowserWindow, Menu, ipcMain } = electron
 
-// SET ENV
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'production'
 
+// global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow;
-let addWindow;
 
-// Listen for app to be ready
-app.on('ready', function() {
-    // Create new window
-    mainWindow = new BrowserWindow();
-    // Load HTML into window
-    mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, 'mainWindow.html'),
-      protocol: 'file:',
-      slashes: true
-    }));
-    // Quit app when closed
-    mainWindow.on('closed', function() {
-        app.quit();
-    });
+function createMainWindow() {
+    const window = new BrowserWindow()
+  
+    window.loadURL(url.format( {
+        pathname: path.join(__dirname, 'mainWindow.html'),
+        protocol: 'file',
+        slashes: true
+    }))
+  
+    window.on('closed', () => {
+      mainWindow = null
+    })
+  
+    window.webContents.on('devtools-opened', () => {
+      window.focus()
+      setImmediate(() => {
+        window.focus()
+      })
+    })
+  
+    window.ELECTRON_DISABLE_SECURITY_WARNINGS;
+    return window
+}
 
+// quit application when all windows are closed
+app.on('window-all-closed', () => {
+    // on macOS it is common for applications to stay open until the user explicitly quits
+    if (process.platform !== 'darwin') {
+    app.quit()
+}})
+
+app.on('activate', () => {
+    // on macOS it is common to re-create a window even after all windows have been closed
+    if (mainWindow === null) {
+    mainWindow = createMainWindow()
+}})
+
+// create main BrowserWindow when electron is ready
+app.on('ready', () => {
+    mainWindow = createMainWindow()
     // Build menu from template
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     // Insert menu
     Menu.setApplicationMenu(mainMenu);
-});
-
-// Handle create add window
-function createAddWindow(){
-    // Create new window
-    addWindow = new BrowserWindow( {
-        width: 300,
-        height: 200,
-        title: 'Add Shopping List Item'
-    });
-    // Load HTML into window
-    addWindow.loadURL(url.format( {
-      pathname: path.join(__dirname, 'addWindow.html'),
-      protocol: 'file:',
-      slashes: true
-    }));
-    // Garbage Collection handle
-    addWindow.on('close', function() {
-        addWindow = null;
-    });
-}
+})
 
 // Catch item:add
-ipcMain.on('item:add', function(e, item) {
-    mainWindow.webContents.send('item:add', item);
-    addWindow.close();
-});
+ipcMain.on('item:add', function(item) {
+    mainWindow.webContents.send('item:add', item)
+})
 
 // Create menu template
 const mainMenuTemplate = [
@@ -63,7 +66,6 @@ const mainMenuTemplate = [
     label: 'Add Item',
     accelerator: process.platform == 'darwin' ? 'Command+N' : 'Ctrl+N',
     click() {
-        createAddWindow();
     }
   },
   {
@@ -88,15 +90,15 @@ if (process.platform == "darwin") {
 }
 
 // Add developer tools item if not in production
-if (process.env.NODE_ENV !== 'production'){
-    mainMenuTemplate.push({
+if (process.env.NODE_ENV !== 'production') {
+    mainMenuTemplate.push( {
         label: 'Developer Tools',
-        submenu:[
+        submenu: [
             {
                 label: 'Toggle DevTools',
                 accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
-                click(item, focusedWindow){
-                    focusedWindow.toggleDevTools();
+                click() {
+                    mainWindow.toggleDevTools();
                 }
             },
             {

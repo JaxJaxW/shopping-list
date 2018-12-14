@@ -2,50 +2,51 @@
 <html lang="en">
 <head>
     <title>Shopping List</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.css">
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper">
-            <a class="brand-logo center">Shopping List</a>
-        </div>
-    </nav>
 
-    <ul></ul>
+<nav>
+    <div class="nav-wrapper">
+      <a class="brand-logo">Shopping List</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a><i class="material-icons">search</i>Search</a></li>
+        <li><a><i class="material-icons">view_module</i>Toggle View</a></li>
+        <li><a><i class="material-icons">refresh</i>Refresh</a></li>
+        <li><a><i class="material-icons">more_vert</i>Options</a></li>
+      </ul>
+    </div>
+</nav>
 
-    <script>
-        const electron = require('electron');
-        const { ipcRenderer } = electron;
-        const ul = document.querySelector('ul');
-        
-        // Add item
-        ipcRenderer.on('item:add', function(e, item) {
-            ul.className = 'collection';
-            const li = document.createElement('li');
-            li.className = 'collection-item';
-            const itemText = document.createTextNode(item);
-            li.appendChild(itemText);
-            ul.appendChild(li);
-        });
+<div class="container">
+    
 
-        // Clear items
-        ipcRenderer.on('item:clear', function() {
-            ul.innerHTML = '';
-            if (ul.children.length == 0) {
-                ul.className = '';
-            }
-        });
+    <div class="section row">
+        <form id="additemform" class="col s12">
+            <div class="offset-s2 col s8">
+                <input placeholder="Add an item" type="text" id="item" autofocus>
+            </div>
+        </form>
+    </div>
 
-        // Remove item on double click
-        ul.addEventListener('dblclick', removeItem)
+    <div class="section" id="shoppinglistdiv">
+        <ul id="shoppinglist" class="collection with-header">
+            <li class="collection-item">
+                [Insert item here]
+            </li>
+            
+            <li class="collection-item">
+                [Insert item here]
+            </li>
+        </ul>
+    </div>
+</div>
 
-        function removeItem(e) {
-            e.target.remove();
-            if (ul.children.length == 0) {
-                ul.className = '';
-            }
-        }
+<!--JavaScript at end of body for optimized loading-->
+<script type="text/javascript" src="js/render.js"></script>
 
-    </script>
 </body>
 </html>
