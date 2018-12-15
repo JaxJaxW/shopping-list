@@ -4,7 +4,7 @@ const path = require('path')
 
 const { app, BrowserWindow, Menu, ipcMain } = electron
 
-process.env.NODE_ENV = 'production'
+process.env.NODE_ENV = 'development'
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow;
@@ -12,11 +12,7 @@ let mainWindow;
 function createMainWindow() {
     const window = new BrowserWindow()
   
-    window.loadURL(url.format( {
-        pathname: path.join(__dirname, 'mainWindow.html'),
-        protocol: 'file',
-        slashes: true
-    }))
+    window.loadURL(`file://${__dirname}/mainWindow.html`)
   
     window.on('closed', () => {
       mainWindow = null
@@ -62,12 +58,6 @@ ipcMain.on('item:add', function(item) {
 
 // Create menu template
 const mainMenuTemplate = [
-  {
-    label: 'Add Item',
-    accelerator: process.platform == 'darwin' ? 'Command+N' : 'Ctrl+N',
-    click() {
-    }
-  },
   {
     label: 'Clear Items',
     accelerator: process.platform == 'darwin' ? 'Command+C' : 'Ctrl+C',

@@ -2,46 +2,41 @@ const electron = require('electron');
 const { ipcRenderer } = electron;
 
 // Add item
-const shoppinglist = document.getElementById('shoppinglist');
-
-
-
-function addshoppinglistitem() {
-    var li = document.createElement('li');
-    li.className = 'collection-item';
-
-    var item = document.querySelector("#item").value;
-    console.log(item);
-    shoppinglist.appendChild(li).appendChild(item);
-}
+const shoppingList = document.getElementById('shoppinglist');
+const shoppingListDiv = document.getElementById('shoppinglistdiv')
 
 // Submit form - create channel
-const form = document.getElementById('additemform');
+const form = document.querySelector('form');
 form.addEventListener('submit', function(e) {
     e.preventDefault();
-    document.getElementById('shoppinglistdiv').style.display = "block";
-    
-    addshoppinglistitem();
+    shoppingListDiv.style.display = 'block';
+    const item = document.querySelector('#item').value;
+    addShoppingListItem(item);
+    form.reset();
 });
 
-ipcRenderer.on('item:add', function(item) {    
-    
-    addshoppinglistitem();
-    
-});
+function addShoppingListItem(item) {
+    var li = document.createElement('li');
+    li.className = 'collection-item';
+    shoppinglist.appendChild(li).innerHTML = item;
+}
 
 // Clear items
 ipcRenderer.on('item:clear', function() {
-    ul.innerHTML = '';
-    if (ul.children.length == 0) {
-        ul.className = '';
+    shoppingList.innerHTML = '';
+    if (shoppingList.children.length < 1) {
+        shoppingListDiv.style.display = 'none';
     }
 });
 
 // Remove item on double click
-ul.addEventListener('dblclick', function(e) {
+shoppingList.addEventListener('dblclick', function(e) {
     e.target.remove();
-    if (ul.children.length == 0) {
-        ul.className = '';
+    if (shoppingList.children.length < 1) {
+        shoppingListDiv.style.display = 'none';
     }
 });
+
+if (shoppingList.children.length < 1) {
+    shoppingListDiv.style.display = 'none';
+}
