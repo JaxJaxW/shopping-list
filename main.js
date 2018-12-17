@@ -1,31 +1,26 @@
-const electron = require('electron')
-const url = require('url')
-const path = require('path')
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 
-const { app, BrowserWindow, Menu, ipcMain } = electron
-
-process.env.NODE_ENV = 'development'
+process.env.NODE_ENV = 'development';
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow;
 
 function createMainWindow() {
-    const window = new BrowserWindow()
+    const window = new BrowserWindow();
   
     window.loadURL(`file://${__dirname}/mainWindow.html`)
   
     window.on('closed', () => {
       mainWindow = null
-    })
+    });
   
     window.webContents.on('devtools-opened', () => {
       window.focus()
       setImmediate(() => {
         window.focus()
-      })
-    })
+      });
+    });
   
-    window.ELECTRON_DISABLE_SECURITY_WARNINGS;
     return window
 }
 
@@ -34,13 +29,13 @@ app.on('window-all-closed', () => {
     // on macOS it is common for applications to stay open until the user explicitly quits
     if (process.platform !== 'darwin') {
     app.quit()
-}})
+}});
 
 app.on('activate', () => {
     // on macOS it is common to re-create a window even after all windows have been closed
     if (mainWindow === null) {
     mainWindow = createMainWindow()
-}})
+}});
 
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {

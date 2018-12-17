@@ -5,47 +5,107 @@
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="materialize.css">
+    <link type="text/css" rel="stylesheet" href="css/materialize.css">
+    <!--Import personal stylesheet-->
+    <link type="text/css" rel="stylesheet" href="css/stylesheet.css">
+    
+    
 </head>
 <body>
 
+<!--Nav bar for menu-->
 <nav>
     <div class="nav-wrapper">
       <a class="brand-logo">Shopping List</a>
       <ul class="right hide-on-med-and-down">
         <li><a><i class="material-icons">search</i>Search</a></li>
         <li><a><i class="material-icons">view_module</i>Toggle View</a></li>
-        <li><a><i class="material-icons">refresh</i>Refresh</a></li>
-        <li><a><i class="material-icons">more_vert</i>Options</a></li>
+        <li><a><i class="material-icons">clear_all</i>Refresh</a></li>
+        <li><a><i class="material-icons">menu</i>Options</a></li>
       </ul>
     </div>
 </nav>
 
 <div class="container">
     
+    <!--Form to add item-->
     <div class="section row">
-        <form class="col s12">
-            <div class="offset-s2 col s8">
+        <form id="additemform" class="col s12">
+            <div class="input-field offset-s2 col s8">
                 <input placeholder="Add an item" type="text" id="item" autofocus>
             </div>
         </form>
     </div>
 
-    <div class="section" id="shoppinglistdiv">
-        <ul id="shoppinglist" class="collection with-header">
-            
-            <li>
+    <!--List of items-->
+    <div id="shoppinglistdiv" class="section">
+        <ul id="shoppinglist" class="collection">
+
+            <li class="collection-item" id="listitem:Where" draggable=true>
                 <div class="input-field">
-                    <input onchange="capitalize(this)" value="itemhere" id="listitem" type="text">
+                    <a class="dropdown-trigger prefix material-icons" data-target="list-options">more_vert</a>
+                    <input onchange="capitalize(event)" value="Where" type="text">
+                </div>
+            </li>
+            
+            <li class="collection-item" id="listitem:There" draggable=true>
+                <div class="input-field">
+                    <a class="dropdown-trigger prefix material-icons" data-target="list-options">more_vert</a>
+                    <input onchange="capitalize(event)" value="There" type="text">
                 </div>
             </li>
 
         </ul>
     </div>
+
+    <!--Cards-->
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Card Title</span>
+            <p>I am a very simple card. I am good at containing small bits of information.
+        I am convenient because I require little markup to use effectively.</p>
+        </div>
+    </div>
+    
+    <div class="card horizontal">
+        <div class="card-image">
+            <img src="https://lorempixel.com/100/190/nature/6">
+        </div>
+        <div class="card-stacked">
+            <div class="card-content">
+                <p>I am a very simple card. I am good at containing small bits of information.</p>
+            </div>
+            <div class="card-action">
+                <a href="#">This is a link</a>
+            </div>
+        </div>
+    </div>
+    
 </div>
 
-<!--JavaScript at end of body for optimized loading-->
-<script type="text/javascript" src="render.js"></script>
+
+
+<!--Dropdown menus-->
+<ul id='app-options' class='dropdown-content'>
+    <li><a>one</a></li>
+    <li><a>two</a></li>
+    <li><a><i class="material-icons">view_module</i></a></li>
+    <li><a><i class="material-icons">cloud</i></a></li>
+</ul>
+
+<ul id='list-options' class='dropdown-content'>
+    <li><a><i class="material-icons">drag_handle</i></a></li>
+    <li><a><i class="material-icons">edit</i></a></li>
+</ul>
+
+<!-- Scripts -->
+
+<!--Import JQuery from Google CDN-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+<!--Import materialize functionality-->
+<script src="js/materialize.js" type="text/javascript"></script>
+<!--Import render.js for webpage functionality-->
+<script src="render.js" type="text/javascript"></script>
 
 </body>
 </html>
