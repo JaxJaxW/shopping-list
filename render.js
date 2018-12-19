@@ -8,6 +8,7 @@ M.AutoInit();
 // Add item
 const shoppingList = document.getElementById("shoppinglist");
 const shoppingListDiv = document.getElementById("shoppinglistdiv");
+var listitems = [...document.querySelectorAll('[id^="listitem:"]')];
 
 // Submit form - create channel
 const form = document.getElementById("additemform");
@@ -94,6 +95,8 @@ if (shoppingList.childElementCount == 0) {
 
 // Adding Drag and Drop functionality
 
+/*
+
 function drop(e) {
     e.preventDefault(); // Drop the element
     var drop_target = e.target;
@@ -105,10 +108,45 @@ function drop(e) {
     drag_target.before(drop_target);
     tmp.replaceWith(drag_target);
 }
+*/
 
 
+// MOUSE MOVEMENT //
+document.addEventListener("mousemove", getMouseDirection, false);
+ 
+var xDirection = "";
+var yDirection = "";
+ 
+var oldX = 0;
+var oldY = 0;
+ 
+function getMouseDirection(e) {
+    var x = e.clientX;
+    var y = e.clientY;
 
-
+    // Deal with the horizontal case
+    if (x - oldX == 0) {
+        xDirection = "";
+    } else if (x - oldX > 0) {
+        xDirection = "right";
+    } else {
+        xDirection = "left";
+    }
+ 
+    // Deal with the vertical case
+    if (y - oldY == 0) {
+        yDirection = "";
+    } else if (y - oldY > 0) {
+        yDirection = "down";
+    } else {
+        yDirection = "up";
+    }
+ 
+    oldX = x;
+    oldY = y;
+ 
+    //console.log(xDirection + " " + yDirection);
+}
 
 
 
@@ -116,6 +154,10 @@ function drop(e) {
 /* ----------------- Events fired on the drag target ----------------- */
 
 document.addEventListener("dragstart", function(event) {
+    // HALP
+    event.stopPropagation();
+    
+    event.dataTransfer.effectAllowed = 'move';
     // The dataTransfer.setData() method sets the data type and the value of the dragged data
     event.dataTransfer.setData("draggeditem", event.target.id);
     
@@ -123,24 +165,25 @@ document.addEventListener("dragstart", function(event) {
     event.target.classList.add("draggeditem");
 
     // Creates phantom list objects
-    var phantom = document.createElement('li');
-    phantom.className = "phantom droptarget collection-item";
-    phantom.style.display = "none";
+    // Have to create a new one each time, otherwise it shifts it's position... odd
+    function createPhantomLi() {
+        var phantom = document.createElement('li');
+        phantom.className = "phantom droptarget collection-item";
+        phantom.style.display = "none";
+        return phantom;
+    }
 
     // Place phantom list objects for easy drag and drop
-    for (let i = 0; i < shoppingList.children.length; i++) {
-        shoppingList.insertBefore(phantom, shoppingList.children[i]);
-
-        if (i == shoppingList.children.length - 1) {
-            shoppingList.appendChild(phantom);
-        }
+    //Location: top of doc -- listitems = document.querySelectorAll('[id^="listitem:"]')
+    for (let listitem of listitems) {
+        shoppingList.insertBefore(createPhantomLi(), listitem);  
     }
-    
+    shoppingList.appendChild(createPhantomLi());
 });
 
 // While dragging the p element, change the color of the output text
 document.addEventListener("drag", function(event) {
-    //document.getElementById("demo").style.color = "red";
+    // UNUSED CURRENTLY
 });
 
 // Reset list to normal - remove identifiers and hidden list objects
@@ -148,24 +191,53 @@ document.addEventListener("dragend", function(event) {
     // Reset class identifiers
     event.target.classList.remove("draggeditem");
     // Remove all phantom list objects
-    $( ".phantom" ).remove();
-
+    $(".phantom").remove();
 });
+
+
+
+
+
 
 /* ----------------- Events fired on the drop target ----------------- */
 
-// By default, data/elements cannot be dropped in other elements. To allow a drop, we must prevent the default handling of the element
+// By default, data/elements to be dropped in other elements
 document.addEventListener("dragover", function(event) {
+    // Allow data/elements to be dropped in other elements
     event.preventDefault();
+
+    if (listitems.includes(event.target)) {
+        var children = [...shoppingList.children];
+        var index = children.indexOf(event.target);
+
+        if (yDirection === "up") {
+            var elem = children[index - 1];
+            if (elem.classList.contains("phantom")) {
+                event.target.style.display = "block";
+                event.target.style.border = "5px solid black";
+                event.target.innerHTML = "[Insert Data Here]";
+            }
+        } else if (yDirection === "down") {
+            var elem = children[index + 1];
+            if (elem.classList.contains("phantom")) {
+                event.target.style.display = "block";
+                event.target.style.border = "5px solid black";
+                event.target.innerHTML = "[Insert Data Here]";
+            }
+        } else {
+            //Do something
+        }
+    }
 });
 
-// When the draggable li element enters the droptarget, set visible and focus
+// When the draggable li element enters the droptarget, display and pronounce list element
 document.addEventListener("dragenter", function(event) {
-    if (event.target.className == "droptarget") {
+    if (event.target.classList.contains("droptarget")) {
         // Display and pronounce phantom list element
         event.target.style.display = "block";
-        event.target.style.border = "2px solid black";
-        event.target.style.opacity = 0.5;
+        event.target.style.border = "5px solid black";
+        event.target.innerHTML = "[Insert Data Here]";
+        //event.target.style.opacity = 0.5;
 
         // Add temporary data for preview
         var oldParent = event.dataTransfer.getData("draggeditem");
@@ -177,26 +249,27 @@ document.addEventListener("dragenter", function(event) {
 
 // When the draggable li element leaves the droptarget, reset the DIVS's border style
 document.addEventListener("dragleave", function(event) {
-    if (event.target.className == "droptarget") {
+    if (event.target.classList.contains("droptarget")) {
         // Rehide phantom list element
         event.target.style.display = "none";
         event.target.style.border = "none";
-        event.target.style.opacity = 1; // Doesn't really matter since it's invisible anyways
-    
+        //event.target.style.opacity = 1; // Doesn't really matter since it's invisible anyways
+
         // Remove temporary data
         event.target.innerHTML = "";
     }
 });
 
-/* On drop - Prevent the browser default handling of the data (default is open as link on drop)
+/*
 Reset the color of the output text and DIV's border color
 Get the dragged data with the dataTransfer.getData() method
 The dragged data is the id of the dragged element ("drag1")
 Append the dragged element into the drop element
 */
 document.addEventListener("drop", function(event) {
+    // Prevent the browser default handling of the data (default is open as link on drop)
     event.preventDefault();
-    if (event.target.className == "droptarget") {
+    if (event.target.classList.contains("droptarget")) {
         document.getElementById("demo").style.color = "";
         event.target.style.border = "";
         var data = event.dataTransfer.getData("Text");
