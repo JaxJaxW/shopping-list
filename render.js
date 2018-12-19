@@ -113,7 +113,6 @@ function drop(e) {
 
 // MOUSE MOVEMENT //
 document.addEventListener("mousemove", getMouseDirection, false);
- 
 var xDirection = "";
 var yDirection = "";
  
@@ -144,9 +143,7 @@ function getMouseDirection(e) {
  
     oldX = x;
     oldY = y;
- 
-    //console.log(xDirection + " " + yDirection);
-}
+ }
 
 
 
@@ -155,12 +152,14 @@ function getMouseDirection(e) {
 
 document.addEventListener("dragstart", function(event) {
     // HALP
-    event.stopPropagation();
+    //event.stopPropagation();
     
-    event.dataTransfer.effectAllowed = 'move';
+    //event.dataTransfer.effectAllowed = 'move';
     // The dataTransfer.setData() method sets the data type and the value of the dragged data
-    event.dataTransfer.setData("draggeditem", event.target.id);
-    
+    event.dataTransfer.setData("node", event.target);
+    event.dataTransfer.setData("id", event.target.id);
+    console.log(event.dataTransfer.getData("id"));
+    console.log(event.target.id);
     // Sets dragged item with identifier to remove list item later
     event.target.classList.add("draggeditem");
 
@@ -196,9 +195,6 @@ document.addEventListener("dragend", function(event) {
 
 
 
-
-
-
 /* ----------------- Events fired on the drop target ----------------- */
 
 // By default, data/elements to be dropped in other elements
@@ -207,42 +203,74 @@ document.addEventListener("dragover", function(event) {
     event.preventDefault();
 
     if (listitems.includes(event.target)) {
+        //Find position of event element in the shopping list
         var children = [...shoppingList.children];
         var index = children.indexOf(event.target);
+        var topindex = children.length - 1;
+
+        //Conditionalize it so doesn't return null pointer
+        var elemBelow = null;
+        var elemAbove = null;
+    
+        if (children[index - 1].classList.contains("phantom")) {
+            elemAbove = children[index - 1];
+        }
+
+        if (children[index + 1].classList.contains("phantom")) {
+            elemBelow = children[index + 1];
+        }
+
+        function displayElem(elem) {
+            elem.style.display = "block";
+            elem.style.border = "1px solid black";
+            elem.innerHTML = "[Insert Data Here]";
+        }
+
+        function hideElem(elem) {
+            elem.style.display = "none";
+            elem.style.border = "none";
+            elem.innerHTML = "";
+        }
+
+        if (index > 1) {
+            //Hide top element (phantom element) as it's not needed
+            hideElem(children[0]);
+        }
+        if (topindex - index > 1) {
+            //Hide bottom element (phantom element) as it's not needed
+            hideElem(children[topindex]);
+        }
 
         if (yDirection === "up") {
-            var elem = children[index - 1];
-            if (elem.classList.contains("phantom")) {
-                event.target.style.display = "block";
-                event.target.style.border = "5px solid black";
-                event.target.innerHTML = "[Insert Data Here]";
+            //Display phantom element above
+            if (elemAbove !== null) {
+                displayElem(elemAbove);
             }
+            //Hide phantom element below
+            if (elemBelow !== null) {
+                hideElem(elemBelow);
+            }
+
         } else if (yDirection === "down") {
-            var elem = children[index + 1];
-            if (elem.classList.contains("phantom")) {
-                event.target.style.display = "block";
-                event.target.style.border = "5px solid black";
-                event.target.innerHTML = "[Insert Data Here]";
+            
+            if (elemBelow !== null) {
+                displayElem(elemBelow);
             }
-        } else {
-            //Do something
+            if (elemAbove !== null) {
+                hideElem(elemAbove);
+            }
         }
     }
 });
 
 // When the draggable li element enters the droptarget, display and pronounce list element
 document.addEventListener("dragenter", function(event) {
-    if (event.target.classList.contains("droptarget")) {
-        // Display and pronounce phantom list element
-        event.target.style.display = "block";
-        event.target.style.border = "5px solid black";
-        event.target.innerHTML = "[Insert Data Here]";
-        //event.target.style.opacity = 0.5;
-
+    if (event.target.classList.contains("phantom")) {
         // Add temporary data for preview
-        var oldParent = event.dataTransfer.getData("draggeditem");
-        while (oldParent.childNodes.length > 0) {
-            event.target.appendChild(oldParent.childNodes[0]);
+        var childNodes = $(".draggeditem:first").children();
+        event.target.innerHTML = "Preview";
+        for (let i = 0; i < childNodes.length; i++) {
+            event.target.appendChild(childNodes[i].cloneNode(true));
         }
     }
 });
@@ -253,7 +281,6 @@ document.addEventListener("dragleave", function(event) {
         // Rehide phantom list element
         event.target.style.display = "none";
         event.target.style.border = "none";
-        //event.target.style.opacity = 1; // Doesn't really matter since it's invisible anyways
 
         // Remove temporary data
         event.target.innerHTML = "";
@@ -269,10 +296,8 @@ Append the dragged element into the drop element
 document.addEventListener("drop", function(event) {
     // Prevent the browser default handling of the data (default is open as link on drop)
     event.preventDefault();
-    if (event.target.classList.contains("droptarget")) {
-        document.getElementById("demo").style.color = "";
-        event.target.style.border = "";
-        var data = event.dataTransfer.getData("Text");
-        event.target.appendChild(document.getElementById(data));
+
+    if (event.target.classList.contains("phantom")) {
+        $(".draggeditem:first").detach().insertBefore(event.target);
     }
 });

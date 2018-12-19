@@ -25,54 +25,37 @@
       </ul>
     </div>
 </nav>
-
-<div class="container">
-    
-    <!--Form to add item-->
-    <div class="section row">
-        <form id="additemform" class="col s12">
-            <div class="input-field offset-s2 col s8">
-                <input placeholder="Add an item" type="text" id="item" autofocus>
-            </div>
-        </form>
-    </div>
-
-    <!--List of items-->
-    <div id="shoppinglistdiv" class="section">
-        <ul id="shoppinglist" class="collection">
-
-            <li class="collection-item" id="listitem:Where" draggable=true>
-                <div class="input-field">
-                    <!--<a class="dropdown-trigger prefix material-icons" data-target="list-options">more_vert</a>-->
-                    <input onchange="capitalize(event)" value="Where" type="text">
-                </div>
-            </li>
-            
-            <li class="collection-item" id="listitem:There" draggable=true>
-                <div class="input-field">
-                    <!--<a class="dropdown-trigger prefix material-icons" data-target="list-options">more_vert</a>-->
-                    <input onchange="capitalize(event)" value="There" type="text">
-                </div>
-            </li>
-
-        </ul>
-    </div>
-    
+ 
+<!--Form to add item-->
+<div id="formToAddItem" class="container section row">
+    <form id="additemform" class="col s12">
+        <div class="input-field offset-s2 col s8">
+            <input placeholder="Add an item" type="text" id="item" autofocus>
+        </div>
+    </form>
 </div>
 
+<!--List of items-->
+<div id="shoppinglistdiv" class="container section">
+    <ul id="shoppinglist" class="collection">
 
-<!--Dropdown menus-->
-<ul id='app-options' class='dropdown-content'>
-    <li><a>one</a></li>
-    <li><a>two</a></li>
-    <li><a><i class="material-icons">view_module</i></a></li>
-    <li><a><i class="material-icons">cloud</i></a></li>
-</ul>
+        <li class="collection-item" id="listitem:Where" draggable=true>
+            <div class="input-field">
+                <!--<a class="dropdown-trigger prefix material-icons" data-target="list-options">more_vert</a>-->
+                <input onchange="capitalize(event)" value="Where" type="text">
+            </div>
+        </li>
+        
+        <li class="collection-item" id="listitem:There" draggable=true>
+            <div class="input-field">
+                <!--<a class="dropdown-trigger prefix material-icons" data-target="list-options">more_vert</a>-->
+                <input onchange="capitalize(event)" value="There" type="text">
+            </div>
+        </li>
 
-<ul id='list-options' class='dropdown-content'>
-    <li><a><i class="material-icons">drag_handle</i></a></li>
-    <li><a><i class="material-icons">edit</i></a></li>
-</ul>
+    </ul>
+</div>
+
 
 <!-- Scripts -->
 
