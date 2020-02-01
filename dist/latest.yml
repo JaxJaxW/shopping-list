@@ -1,8 +1,8 @@
 version: 1.0.0
 files:
   - url: shopping-list-setup-1.0.0.exe
-    sha512: 12DAMyZ+3lcQM/caUXVsAd4FM9LtMJ6zlpBJXhvMbWB6cAqw2lxUMpCJYKyOzga3fNXW8rwRWo5k4QKqWAZKqQ==
-    size: 38062498
+    sha512: IYKP1VlvdD9DtzVTG4DCp779mV+smOHqWz8lG5DrHggzlvNA1lSun7CtWb/0ThqLendZ/q0sr2fBqkDonX3k8A==
+    size: 38347354
 path: shopping-list-setup-1.0.0.exe
-sha512: 12DAMyZ+3lcQM/caUXVsAd4FM9LtMJ6zlpBJXhvMbWB6cAqw2lxUMpCJYKyOzga3fNXW8rwRWo5k4QKqWAZKqQ==
-releaseDate: '2018-12-09T05:22:03.487Z'
+sha512: IYKP1VlvdD9DtzVTG4DCp779mV+smOHqWz8lG5DrHggzlvNA1lSun7CtWb/0ThqLendZ/q0sr2fBqkDonX3k8A==
+releaseDate: '2020-02-01T04:55:02.871Z'
